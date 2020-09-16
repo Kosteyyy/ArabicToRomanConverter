@@ -1,0 +1,41 @@
+{
+  "name": "react_arabictoromanconverter",
+  "version": "1.0.0",
+  "description": "Basic React project with express server",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -w server server/server.js",
+    "compile": "babel src --out-dir public",
+    "watch": "babel src --out-dir public --watch --verbose",
+    "build": "webpack --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kosteyyy/ArabicToRomanConverter.git"
+  },
+  "keywords": [
+    "React"
+  ],
+  "author": "Averkiev Konstantin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kosteyyy/ArabicToRomanConverter/issues"
+  },
+  "homepage": "https://github.com/Kosteyyy/ArabicToRomanConverter#readme",
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "webpack": "^5.0.0-beta.30",
+    "webpack-cli": "^3.3.12"
+  }
+}
