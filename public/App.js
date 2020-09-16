@@ -22,6 +22,9 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+/* for build use this:
+import React from "react";
+import ReactDOM from "react-dom"; */
 function digitToRoman(base, digit) {
   var thousands = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   //convert digit to roman 
@@ -79,75 +82,119 @@ function convertToRoman(num) {
   return roman;
 }
 
-var ConverterToRoman = /*#__PURE__*/function (_React$Component) {
-  _inherits(ConverterToRoman, _React$Component);
+var DisplayRoman = /*#__PURE__*/function (_React$Component) {
+  _inherits(DisplayRoman, _React$Component);
 
-  var _super = _createSuper(ConverterToRoman);
+  var _super = _createSuper(DisplayRoman);
 
-  function ConverterToRoman() {
+  function DisplayRoman() {
+    _classCallCheck(this, DisplayRoman);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(DisplayRoman, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React.createElement("h2", null, this.props.romanNumber);
+    }
+  }]);
+
+  return DisplayRoman;
+}(React.Component);
+
+var GetArabicNumber = /*#__PURE__*/function (_React$Component2) {
+  _inherits(GetArabicNumber, _React$Component2);
+
+  var _super2 = _createSuper(GetArabicNumber);
+
+  function GetArabicNumber() {
     var _this;
 
-    _classCallCheck(this, ConverterToRoman);
+    _classCallCheck(this, GetArabicNumber);
 
-    _this = _super.call(this);
-    _this.state = {
-      romanNumber: "RomanNumber",
-      arabicNumber: 0
-    };
-    _this.numberValue = _this.numberValue.bind(_assertThisInitialized(_this));
-    _this.setNewNumber = _this.setNewNumber.bind(_assertThisInitialized(_this));
+    _this = _super2.call(this);
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(ConverterToRoman, [{
-    key: "numberValue",
-    value: function numberValue(e) {
-      this.setState({
-        arabicNumber: e.target.value
-      });
-      console.log("number changed to: " + this.state.arabicNumber);
-    }
-  }, {
-    key: "setNewNumber",
-    value: function setNewNumber(e) {
-      console.log("SetNumber to: " + this.state.arabicNumber);
-      var romanStr;
-
-      if (this.state.arabicNumber.match(/\D/)) {
-        romanStr = "Only digits allowed";
-      } else {
-        romanStr = convertToRoman(this.state.arabicNumber);
-      }
-
-      this.setState({
-        romanNumber: romanStr
-      });
-      this._input.value = ""; // 3 Назначаем input value, поскольку мы назначили this._input ссылаться на input
-
-      this._input.focus(); // 4 Фокус на инпут        
-
-
+  _createClass(GetArabicNumber, [{
+    key: "handleSubmit",
+    value: function handleSubmit(e) {
       e.preventDefault();
+      var form = document.forms.getArabicNumber;
+      console.log("Input: ", form.Number.value);
+      this.props.setNumber(form.Number.value);
+      form.Number.value = "";
+      form.Number.focus();
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
-
-      return /*#__PURE__*/React.createElement("div", {
-        className: "ArabicConverter"
-      }, /*#__PURE__*/React.createElement("h1", null, "Convert Arabic to Roman number"), /*#__PURE__*/React.createElement("h2", null, this.state.romanNumber), /*#__PURE__*/React.createElement("form", {
-        onSubmit: this.setNewNumber
+      return /*#__PURE__*/React.createElement("form", {
+        name: "getArabicNumber",
+        onSubmit: this.handleSubmit
       }, /*#__PURE__*/React.createElement("input", {
-        ref: function ref(el) {
-          return _this2._input = el;
-        },
-        onChange: this.numberValue,
+        name: "Number",
         type: "text",
         placeholder: "Enter a number"
       }), /*#__PURE__*/React.createElement("button", {
         type: "submit"
-      }, "Convert")));
+      }, "Convert"));
+    }
+  }]);
+
+  return GetArabicNumber;
+}(React.Component);
+
+var ConverterToRoman = /*#__PURE__*/function (_React$Component3) {
+  _inherits(ConverterToRoman, _React$Component3);
+
+  var _super3 = _createSuper(ConverterToRoman);
+
+  function ConverterToRoman() {
+    var _this2;
+
+    _classCallCheck(this, ConverterToRoman);
+
+    _this2 = _super3.call(this);
+    _this2.state = {
+      romanNumber: "RomanNumber",
+      arabicNumber: 0
+    };
+    _this2.setNewNumber = _this2.setNewNumber.bind(_assertThisInitialized(_this2));
+    return _this2;
+  }
+
+  _createClass(ConverterToRoman, [{
+    key: "setNewNumber",
+    value: function setNewNumber(number) {
+      console.log("SetNumber to: " + number);
+      var romanStr;
+
+      if (number.match(/\D/)) {
+        romanStr = "Only digits allowed";
+      } else {
+        romanStr = convertToRoman(number);
+      }
+
+      console.log('Roman string: ', romanStr);
+      console.log(this);
+      this.setState({
+        romanNumber: romanStr,
+        arabicNumber: number
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React.createElement("div", {
+        className: "ArabicConverter"
+      }, /*#__PURE__*/React.createElement("h1", null, "Convert Arabic to Roman number"), /*#__PURE__*/React.createElement(DisplayRoman, {
+        romanNumber: this.state.romanNumber
+      }), /*#__PURE__*/React.createElement(GetArabicNumber, {
+        setNumber: this.setNewNumber
+      }));
     }
   }]);
 

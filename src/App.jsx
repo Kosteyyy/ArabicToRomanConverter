@@ -1,3 +1,7 @@
+/* for build use this:
+import React from "react";
+import ReactDOM from "react-dom"; */
+
 function digitToRoman(base, digit, thousands = false) {
     //convert digit to roman 
     //base is array [1,5,10] in roman accoding to the category of number
@@ -27,6 +31,7 @@ function digitToRoman(base, digit, thousands = false) {
 }
   
 function convertToRoman(num) {
+    
     //this works correctly up to 3999. Greater numbers require underlined symbols.
     //bases 1,5,10 for categories
     const BASES = {units: ['I', 'V', 'X'], tens: ['X', 'L', 'C'], hundreds: ['C', 'D', 'M'], thousands: ['M', 'A', 'K']};
@@ -52,6 +57,42 @@ function convertToRoman(num) {
    return roman;
 }
 
+class DisplayRoman extends React.Component {
+    render() {
+        return(
+        <h2>{this.props.romanNumber}</h2>
+        );
+    }
+}
+
+class GetArabicNumber extends React.Component {
+    constructor() {
+        super();
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const form = document.forms.getArabicNumber;
+        console.log("Input: ", form.Number.value);
+        this.props.setNumber(form.Number.value);
+        form.Number.value = "";
+        form.Number.focus();
+    }
+
+    render() {
+        return(
+            <form name="getArabicNumber" onSubmit={this.handleSubmit}>
+                <input name="Number"
+                    type="text" placeholder="Enter a number"></input>
+                <button type="submit">Convert</button>
+            </form>
+        );
+
+    }
+}
+
 class ConverterToRoman extends React.Component {
     constructor() {
         super();
@@ -59,47 +100,31 @@ class ConverterToRoman extends React.Component {
             romanNumber: "RomanNumber",
             arabicNumber: 0
         };
-
-        this.numberValue = this.numberValue.bind(this);
-        this.setNewNumber = this.setNewNumber.bind(this);
+    this.setNewNumber = this.setNewNumber.bind(this);
     }
 
-    numberValue(e) {
-        this.setState({
-            arabicNumber: e.target.value
-        });
-        console.log("number changed to: " + this.state.arabicNumber);
-    }
-
-    setNewNumber(e) {
-        console.log("SetNumber to: " + this.state.arabicNumber);
+    setNewNumber(number) {
+        console.log("SetNumber to: " + number);
         let romanStr;
-        if (this.state.arabicNumber.match(/\D/)) {
+        if (number.match(/\D/)) {
             romanStr = "Only digits allowed";
         } else {
-        romanStr = convertToRoman(this.state.arabicNumber);
+        romanStr = convertToRoman(number);
         }
-
+        console.log('Roman string: ', romanStr);
+        console.log(this);
         this.setState({
-            romanNumber: romanStr
+            romanNumber: romanStr,
+            arabicNumber: number
         });
-
-        this._input.value = ""; // 3 Назначаем input value, поскольку мы назначили this._input ссылаться на input
-        this._input.focus(); // 4 Фокус на инпут        
-        e.preventDefault();
     }
 
     render() {
         return(
             <div className="ArabicConverter">
                 <h1>Convert Arabic to Roman number</h1>
-                <h2>{this.state.romanNumber}</h2>
-                <form onSubmit={this.setNewNumber}>
-                    <input 
-                        ref={(el) => this._input = el}
-                        onChange={this.numberValue} type="text" placeholder="Enter a number"></input>
-                    <button type="submit">Convert</button>
-                </form>
+                <DisplayRoman romanNumber={this.state.romanNumber}/>
+                <GetArabicNumber setNumber={this.setNewNumber} />
             </div>
         );
     }
